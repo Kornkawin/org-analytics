@@ -17,6 +17,8 @@ def calculate_latest_times(_nodes, _edges):
         # Find all edges starting from this node and get min time
         candidates = [_nodes[e[1]-1][2] - e[2] for e in _edges if e[0] == src_node]
         _nodes[src_node-1][2] = min(candidates)
+    # clean data
+    for n in _nodes: n[0] = n[0] + 1
     return _nodes[:-1]
 
 def find_critical_path(_nodes):
@@ -55,9 +57,9 @@ if __name__ == '__main__':
         [3, 4, 4],
         [3, 6, 2],
         [4, 5, 8],
+        [5, 10, 3],
         [6, 7, 4],
         [6, 8, 2],
-        [5, 10, 3],
         [7, 10, 3],
         [8, 10, 3],
         [9, 11, 0],     # I->END
@@ -71,7 +73,6 @@ if __name__ == '__main__':
     # Calculate latest times (LT)
     nodes = calculate_latest_times(nodes, edges)
     print("Data Node with ET and LT")
-    
     print(nodes)
     
     # Find critical path
@@ -81,12 +82,12 @@ if __name__ == '__main__':
     
     # Calculate critical time
     critical_time = 0
-    for i in range(len(critical_path) - 1):
-        current, next_node = critical_path[i], critical_path[i + 1]
-        for edge in edges:
-            if edge[0] == current and edge[1] == next_node:
-                critical_time += edge[2]
-                break
-    
+    current_node = 0
+    next_node = None
+    for i in range(len(critical_path)):
+        for e in edges:
+            if e[0] == current_node and e[1] == critical_path[i]:
+                current_node = critical_path[i]
+                critical_time += e[2]
     print("\n\nCritical Time")
     print(critical_time)
