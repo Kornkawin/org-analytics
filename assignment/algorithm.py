@@ -1,5 +1,3 @@
-import numpy as np
-
 '''
     File name: algorithm.py
     Description: The Hungarian Method for the assignment problem.

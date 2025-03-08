@@ -1,5 +1,3 @@
-import numpy as np
-
 # Data structures
 nodes = [
     [1, 0, 0],
