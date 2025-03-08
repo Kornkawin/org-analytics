@@ -33,16 +33,17 @@ def calculate_backward(_nodes, _edges):
 
 def find_critical_path(_nodes):
     """Find nodes where ET equals LT (critical path)"""
-    return [node[0] for node in _nodes if node[1] == node[2]]
+    return [node for node in _nodes if node[1] == node[2]]
 
 def calculate_critical_time(_critical_path):
     _time = 0
     current_node = 0
     next_node = None
-    for i in range(len(critical_path)):
+    for i in range(len(_critical_path)):
         for e in edges:
-            if e[0] == current_node and e[1] == critical_path[i]:
-                current_node = critical_path[i]
+            if e[0] == current_node and e[1] == _critical_path[i][0]:
+                # move forward
+                current_node = _critical_path[i][0]
                 _time += e[2]
     return _time
 
