@@ -99,10 +99,10 @@ if __name__ == '__main__':
     
     # Find critical path
     critical_path = find_critical_path(nodes)
-    print("\n\nCritical Path")
+    print("Critical Path")
     print(critical_path)
     
     # Calculate critical time
     critical_time = calculate_critical_time(critical_path)
-    print("\n\nCritical Time")
+    print("Critical Time")
     print(critical_time)
