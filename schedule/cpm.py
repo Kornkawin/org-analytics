@@ -25,6 +25,17 @@ def find_critical_path(_nodes):
     """Find nodes where ET equals LT (critical path)"""
     return [node[0] for node in _nodes if node[1] == node[2]]
 
+def calculate_critical_time(_critical_path):
+    _time = 0
+    current_node = 0
+    next_node = None
+    for i in range(len(critical_path)):
+        for e in edges:
+            if e[0] == current_node and e[1] == critical_path[i]:
+                current_node = critical_path[i]
+                _time += e[2]
+    return _time
+
 if __name__ == '__main__':
     # Data structures
     # Index 0: Task ID - identifies each milestone or event in the project network
@@ -81,13 +92,6 @@ if __name__ == '__main__':
     print(critical_path)
     
     # Calculate critical time
-    critical_time = 0
-    current_node = 0
-    next_node = None
-    for i in range(len(critical_path)):
-        for e in edges:
-            if e[0] == current_node and e[1] == critical_path[i]:
-                current_node = critical_path[i]
-                critical_time += e[2]
+    critical_time = calculate_critical_time(critical_path)
     print("\n\nCritical Time")
     print(critical_time)
