@@ -1,24 +1,33 @@
 """
     Program to calculate the critical path of a project using the CPM method.
 """
-def calculate_earliest_times(_nodes, _edges):
+def calculate_forward(_nodes, _edges):
     """Forward pass: calculate the earliest times (ET)"""
     for e in _edges:
         dest_node = e[1]
         # Find all edges leading to this destination and get max time
-        candidates = [_nodes[e[0]-1][1] + e[2] for e in _edges if e[1] == dest_node]
-        _nodes[dest_node-1][1] = max(candidates)
+        candidates = [[_nodes[e[0]-1][1] + e[2], e[2]] for e in _edges if e[1] == dest_node]
+        maximum = max(candidates, key=lambda x: x[0])
+        # EF
+        _nodes[dest_node-1][1] = maximum[0]
+        # ES
+        _nodes[dest_node-1][3] = _nodes[dest_node-1][1] - maximum[1]
     return _nodes[:-1]
 
-def calculate_latest_times(_nodes, _edges):
+def calculate_backward(_nodes, _edges):
     """Backward pass: calculate the latest times (LT)"""
     for e in reversed(_edges):
         src_node = e[0]
         # Find all edges starting from this node and get min time
         candidates = [_nodes[e[1]-1][2] - e[2] for e in _edges if e[0] == src_node]
+        # LF
         _nodes[src_node-1][2] = min(candidates)
-    # clean data
-    for n in _nodes: n[0] = n[0] + 1
+    for n in _nodes: 
+        # shift index
+        n[0] = n[0] + 1
+        # LS
+        _time = n[1] - n[3]
+        n[4] = n[2] - _time
     return _nodes[:-1]
 
 def find_critical_path(_nodes):
@@ -41,19 +50,21 @@ if __name__ == '__main__':
     # Index 0: Task ID - identifies each milestone or event in the project network
     # Index 1: Earliest Finish (EF) - initially set to 0, will be calculated during the forward pass algorithm
     # Index 2: Latest Finish (LF) - initially set to 0, will be calculated during the backward pass algorithm
+    # Index 3: Earliest Start (ES)
+    # Index 4: Latest Start (LS)
     nodes = [
-        [0, 0, 0],  #START
-        [1, 0, 0],  #A
-        [2, 0, 0],  #B
-        [3, 0, 0],  #C
-        [4, 0, 0],  #D
-        [5, 0, 0],  #E
-        [6, 0, 0],  #F
-        [7, 0, 0],  #G
-        [8, 0, 0],  #H
-        [9, 0, 0],  #I
-        [10, 0, 0], #J
-        [11, 0, 0]  #END
+        [0, 0, 0, 0, 0],  #START
+        [1, 0, 0, 0, 0],  #A
+        [2, 0, 0, 0, 0],  #B
+        [3, 0, 0, 0, 0],  #C
+        [4, 0, 0, 0, 0],  #D
+        [5, 0, 0, 0, 0],  #E
+        [6, 0, 0, 0, 0],  #F
+        [7, 0, 0, 0, 0],  #G
+        [8, 0, 0, 0, 0],  #H
+        [9, 0, 0, 0, 0],  #I
+        [10, 0, 0, 0, 0], #J
+        [11, 0, 0, 0, 0],  #END
     ]
 
     # Index 0: Source node ID - the starting node of an activity
@@ -78,11 +89,11 @@ if __name__ == '__main__':
     ]
     
     # Calculate earliest times (ET)
-    nodes = calculate_earliest_times(nodes, edges)
+    nodes = calculate_forward(nodes, edges)
     # Set latest time (LT) of last node equal to its earliest time
     nodes[-1][2] = nodes[-1][1]
     # Calculate latest times (LT)
-    nodes = calculate_latest_times(nodes, edges)
+    nodes = calculate_backward(nodes, edges)
     print("Data Node with ET and LT")
     print(nodes)
     
