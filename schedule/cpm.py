@@ -22,12 +22,13 @@ def calculate_backward(_nodes, _edges):
         candidates = [_nodes[e[1]-1][2] - e[2] for e in _edges if e[0] == src_node]
         # LF
         _nodes[src_node-1][2] = min(candidates)
+        # t = (EF-ES)
+        t = _nodes[src_node-1][1] - _nodes[src_node-1][3]
+        # LS = LF - t
+        _nodes[src_node-1][4] = _nodes[src_node-1][2] - t
     for n in _nodes: 
         # shift index
         n[0] = n[0] + 1
-        # LS
-        _time = n[1] - n[3]
-        n[4] = n[2] - _time
     return _nodes[:-1]
 
 def find_critical_path(_nodes):
