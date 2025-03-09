@@ -26,53 +26,78 @@ def calculate_backward(_nodes, _edges):
         t = _nodes[src_node-1][1] - _nodes[src_node-1][3]
         # LS = LF - t
         _nodes[src_node-1][4] = _nodes[src_node-1][2] - t
-    for n in _nodes: 
+    for i in range(len(_nodes)-1): 
         # shift index
-        n[0] = n[0] + 1
+        _nodes[i][0] = _nodes[i][0] + 1
+        _nodes[i][5] = _nodes[i+1][5]
+        _nodes[i][6] = _nodes[i+1][6]
     return _nodes[:-1]
 
 def find_critical_path(_nodes):
     """Find nodes where ET equals LT (critical path)"""
     return [node for node in _nodes if node[1] == node[2]]
 
-def calculate_critical_time(_critical_path):
+def calculate_critical_time(_critical_path, _edges):
     _time = 0
     current_node = 0
     next_node = None
     for i in range(len(_critical_path)):
-        for e in edges:
+        for e in _edges:
             if e[0] == current_node and e[1] == _critical_path[i][0]:
                 # move forward
                 current_node = _critical_path[i][0]
                 _time += e[2]
     return _time
 
+def start(nodes, edges):
+    # Calculate earliest times (ET)
+    nodes = calculate_forward(nodes, edges)
+    # Set latest time (LT) of last node equal to its earliest time
+    nodes[-1][2] = nodes[-1][1]
+    # Calculate latest times (LT)
+    nodes = calculate_backward(nodes, edges)
+    print("Data Node with ET and LT")
+    print(nodes)
+    # Find critical path
+    critical_path = find_critical_path(nodes)
+    print("Critical Path")
+    print(critical_path)
+    # Calculate critical time
+    critical_time = calculate_critical_time(critical_path, edges)
+    print("Critical Time")
+    print(critical_time)
+    return nodes, critical_path, critical_time
+
+
 if __name__ == '__main__':
-    # Data structures
+    # Graph Data structures (Nodes)
     # Index 0: Task ID - identifies each milestone or event in the project network
     # Index 1: Earliest Finish (EF) - initially set to 0, will be calculated during the forward pass algorithm
     # Index 2: Latest Finish (LF) - initially set to 0, will be calculated during the backward pass algorithm
     # Index 3: Earliest Start (ES)
     # Index 4: Latest Start (LS)
-    nodes = [
-        [0, 0, 0, 0, 0],  #START
-        [1, 0, 0, 0, 0],  #A
-        [2, 0, 0, 0, 0],  #B
-        [3, 0, 0, 0, 0],  #C
-        [4, 0, 0, 0, 0],  #D
-        [5, 0, 0, 0, 0],  #E
-        [6, 0, 0, 0, 0],  #F
-        [7, 0, 0, 0, 0],  #G
-        [8, 0, 0, 0, 0],  #H
-        [9, 0, 0, 0, 0],  #I
-        [10, 0, 0, 0, 0], #J
-        [11, 0, 0, 0, 0],  #END
+    # Index 5: Task Days
+    # Index 6: Task Cost
+    n = [
+        [0, 0, 0, 0, 0, 0, 0],  #START
+        [1, 0, 0, 0, 0, 0, 0],  #A
+        [2, 0, 0, 0, 0, 0, 0],  #B
+        [3, 0, 0, 0, 0, 0, 0],  #C
+        [4, 0, 0, 0, 0, 0, 0],  #D
+        [5, 0, 0, 0, 0, 0, 0],  #E
+        [6, 0, 0, 0, 0, 0, 0],  #F
+        [7, 0, 0, 0, 0, 0, 0],  #G
+        [8, 0, 0, 0, 0, 0, 0],  #H
+        [9, 0, 0, 0, 0, 0, 0],  #I
+        [10, 0, 0, 0, 0, 0, 0], #J
+        [11, 0, 0, 0, 0, 0, 0],  #END
     ]
 
+    # Graph Data structures (Edges)
     # Index 0: Source node ID - the starting node of an activity
     # Index 1: Destination node ID - the ending node of an activity
     # Index 2: Actual Time - time required to complete the activity (in consistent units)
-    edges = [
+    e = [
         [0, 1, 3],      # START->A
         [0, 2, 5],      # START->B
         [1, 4, 4],
@@ -90,21 +115,4 @@ if __name__ == '__main__':
         [10, 11, 0],    # J->END
     ]
     
-    # Calculate earliest times (ET)
-    nodes = calculate_forward(nodes, edges)
-    # Set latest time (LT) of last node equal to its earliest time
-    nodes[-1][2] = nodes[-1][1]
-    # Calculate latest times (LT)
-    nodes = calculate_backward(nodes, edges)
-    print("Data Node with ET and LT")
-    print(nodes)
-    
-    # Find critical path
-    critical_path = find_critical_path(nodes)
-    print("Critical Path")
-    print(critical_path)
-    
-    # Calculate critical time
-    critical_time = calculate_critical_time(critical_path)
-    print("Critical Time")
-    print(critical_time)
+    start(n, e)

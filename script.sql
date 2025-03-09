@@ -65,18 +65,18 @@ CREATE TABLE IF NOT EXISTS TASK
     Task_Crash_Cost_Per_Day REAL    NOT NULL,
     Project_ID              INTEGER NOT NULL REFERENCES PROJECT (Project_ID),
     Activity_ID             INTEGER NOT NULL REFERENCES ACTIVITY (Activity_ID),
-    Prev_Activity_ID_1      INTEGER NULL REFERENCES ACTIVITY (Activity_ID),
-    Prev_Activity_ID_2      INTEGER NULL REFERENCES ACTIVITY (Activity_ID),
-    Prev_Activity_ID_3      INTEGER NULL REFERENCES ACTIVITY (Activity_ID),
-    Prev_Activity_ID_4      INTEGER NULL REFERENCES ACTIVITY (Activity_ID)
+    Prev_Activity_ID_1      INTEGER NOT NULL REFERENCES ACTIVITY (Activity_ID),
+    Prev_Activity_ID_2      INTEGER NOT NULL REFERENCES ACTIVITY (Activity_ID),
+    Prev_Activity_ID_3      INTEGER NOT NULL REFERENCES ACTIVITY (Activity_ID),
+    Prev_Activity_ID_4      INTEGER NOT NULL REFERENCES ACTIVITY (Activity_ID)
 );
 INSERT INTO TASK (Task_ID, Task_Date_Launched, Task_Size, Task_Language_Used, Task_Normal_Days, Task_Crash_Days,
                   Task_Normal_Cost, Task_Crash_Cost, Task_Crash_Cost_Per_Day, Project_ID, Activity_ID,
-                  Prev_Activity_ID_1, Prev_Activity_ID_2)
-VALUES (1, '2025-01-01', 'S', 'HTML/CSS/JS', 3, 2, 3000.0, 4500.0, (4500.0 - 3000.0) / (3 - 2), 1, 1, null, null),
-       (2, '2025-01-01', 'M', 'JAVA', 5, 4, 5000.0, 6000.0, (6000.0 - 5000.0) / (5 - 4), 1, 2, null, null),
-       (3, '2025-01-01', 'S', 'JAVA', 3, 1, 3000.0, 5000.0, (5000.0 - 3000.0) / (3 - 1), 1, 3, 2, null),
-       (4, '2025-01-01', 'S', 'JS', 2, 1, 1000.0, 3000.0, (3000.0 - 1000.0) / (2 - 1), 1, 4, 1, 3);
+                  Prev_Activity_ID_1, Prev_Activity_ID_2, Prev_Activity_ID_3, Prev_Activity_ID_4)
+VALUES (1, '2025-01-01', 'S', 'HTML/CSS/JS', 3, 2, 3000.0, 4500.0, (4500.0 - 3000.0) / (3 - 2), 1, 1, 0, 0, 0, 0),
+       (2, '2025-01-01', 'M', 'JAVA', 5, 4, 5000.0, 6000.0, (6000.0 - 5000.0) / (5 - 4), 1, 2, 0, 0, 0, 0),
+       (3, '2025-01-01', 'S', 'JAVA', 3, 1, 3000.0, 5000.0, (5000.0 - 3000.0) / (3 - 1), 1, 3, 2, 0, 0, 0),
+       (4, '2025-01-01', 'S', 'JS', 4, 2, 1000.0, 4000.0, (4000.0 - 1000.0) / (4 - 2), 1, 4, 1, 3, 0, 0);
 
 -- to monitor the progress
 CREATE TABLE IF NOT EXISTS TASK_REPORT
