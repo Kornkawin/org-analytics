@@ -33,17 +33,17 @@ def get_edges_from_db(db_path, task_ids, start_task_ids, terminal_task_ids):
     for task in terminal_task_ids:
         result.append([task, terminal_node, 0])
     for task in tasks:
-        if task[4] == 0:
+        if task[4] is None:
             # start edge
             result.append([start_node, task[0], task[2]])
         else:
             # normal edge
             result.append([task[4], task[0], task[2]])
-            if task[5] != 0:
+            if task[5] is not None:
                 result.append([task[5], task[0], task[2]])
-            if task[6] != 0:
+            if task[6] is not None:
                 result.append([task[6], task[0], task[2]])
-            if task[7] != 0:
+            if task[7] is not None:
                 result.append([task[7], task[0], task[2]])
     conn.close()
     # sort by index 0 and 1
