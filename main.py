@@ -210,7 +210,7 @@ if __name__ == '__main__':
     print("saving assignment ...")
     save_assignment("project.db", solution)
 
-    print("Run Scheduler")
+    print("\nRun Scheduler")
     print("Read data from the database")
     nodes = get_nodes_from_db("project.db", [1, 2, 3, 4])
     print("NODES: ", nodes)
