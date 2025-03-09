@@ -504,7 +504,7 @@ if __name__ == '__main__':
         'D': { '#1': 19, '#2': 22, '#3': 90, '#4': 11 },
     }
     result = find_matching(H, matching_type = 'min', return_type = 'list' )
-    # sort the result by project name
+    # sort the result
     result.sort(key=lambda x: x[0][0])
     print(result)
     
