@@ -5,6 +5,7 @@ DROP TABLE IF EXISTS ACTIVITY;
 DROP TABLE IF EXISTS TASK;
 DROP TABLE IF EXISTS TASK_REPORT;
 DROP TABLE IF EXISTS TASK_PLAN;
+DROP TABLE IF EXISTS ASSIGN_PARAMETER;
 
 -- master table
 CREATE TABLE IF NOT EXISTS PROJECT
@@ -26,18 +27,54 @@ CREATE TABLE IF NOT EXISTS EMPLOYEE
     Employee_ID          INTEGER PRIMARY KEY AUTOINCREMENT,
     Employee_Name        TEXT    NOT NULL,
     Employee_Position    TEXT    NOT NULL,
-    Skill_Level_Backend  INTEGER NOT NULL,
-    Skill_Level_Frontend INTEGER NOT NULL,
-    Skill_Level_Testing  INTEGER NOT NULL,
+    Skill_Java           INTEGER NOT NULL,
+    Skill_Html_Css_Js    INTEGER NOT NULL,
+    Skill_Test           INTEGER NOT NULL,
     Employee_Contact     TEXT    NOT NULL
 );
-INSERT INTO EMPLOYEE (Employee_ID, Employee_Name, Employee_Position, Skill_Level_Backend, Skill_Level_Frontend,
-                      Skill_Level_Testing, Employee_Contact)
+INSERT INTO EMPLOYEE (Employee_ID, Employee_Name, Employee_Position, Skill_Java, Skill_Html_Css_Js,
+                      Skill_Test, Employee_Contact)
 VALUES (1, 'John', 'Fullstack Developer', 3, 2, 0, '08123456789'),
        (2, 'Sara', 'Fullstack Developer', 2, 3, 0, '08123456789'),
        (3, 'Simon', 'Fullstack Developer', 1, 1, 0, '08123456789'),
-       (4, 'Bobby', 'Tester', 0, 0, 5, '08123456789');
+       (4, 'Bobby', 'Tester', 0, 0, 3, '08123456789');
 
+CREATE TABLE IF NOT EXISTS ASSIGN_PARAMETER
+(
+    Task_Size                   TEXT NOT NULL,
+    Task_Language_Used          TEXT NOT NULL,
+    Skill_Level                 INTEGER NOT NULL,
+    Expected_Days               INTEGER NOT NULL,
+    PRIMARY KEY (Task_Size, Task_Language_Used, Skill_Level)
+);
+INSERT INTO ASSIGN_PARAMETER (Task_Size, Task_Language_Used, Skill_Level, Expected_Days)
+VALUES ('S', 'HTML/CSS/JS', 1, 5),
+       ('M', 'HTML/CSS/JS', 1, 7),
+       ('L', 'HTML/CSS/JS', 1, 9),
+       ('S', 'HTML/CSS/JS', 2, 3),
+       ('M', 'HTML/CSS/JS', 2, 5),
+       ('L', 'HTML/CSS/JS', 2, 7),
+       ('S', 'HTML/CSS/JS', 3, 2),
+       ('M', 'HTML/CSS/JS', 3, 4),
+       ('L', 'HTML/CSS/JS', 3, 6),
+       ('S', 'JAVA', 1, 5),
+       ('M', 'JAVA', 1, 7),
+       ('L', 'JAVA', 1, 9),
+       ('S', 'JAVA', 2, 3),
+       ('M', 'JAVA', 2, 5),
+       ('L', 'JAVA', 2, 7),
+       ('S', 'JAVA', 3, 2),
+       ('M', 'JAVA', 3, 4),
+       ('L', 'JAVA', 3, 6),
+       ('S', 'TEST', 1, 6),
+       ('M', 'TEST', 1, 9),
+       ('L', 'TEST', 1, 11),
+       ('S', 'TEST', 2, 4),
+       ('M', 'TEST', 2, 7),
+       ('L', 'TEST', 2, 9),
+       ('S', 'TEST', 3, 2),
+       ('M', 'TEST', 3, 5),
+       ('L', 'TEST', 3, 7);
 
 CREATE TABLE IF NOT EXISTS ACTIVITY
 (
@@ -76,7 +113,7 @@ INSERT INTO TASK (Task_ID, Task_Date_Launched, Task_Size, Task_Language_Used, Ta
 VALUES (1, '2025-01-01', 'S', 'HTML/CSS/JS', 3, 2, 3000.0, 4500.0, (4500.0 - 3000.0) / (3 - 2), 1, 1, null, null, null, null),
        (2, '2025-01-01', 'M', 'JAVA', 5, 4, 5000.0, 6000.0, (6000.0 - 5000.0) / (5 - 4), 1, 2, null, null, null, null),
        (3, '2025-01-01', 'S', 'JAVA', 3, 1, 3000.0, 5000.0, (5000.0 - 3000.0) / (3 - 1), 1, 3, 2, null, null, null),
-       (4, '2025-01-01', 'S', 'JS', 4, 2, 1000.0, 4000.0, (4000.0 - 1000.0) / (4 - 2), 1, 4, 1, 3, null, null);
+       (4, '2025-01-01', 'S', 'TEST', 4, 2, 1000.0, 4000.0, (4000.0 - 1000.0) / (4 - 2), 1, 4, 1, 3, null, null);
 
 -- to monitor the progress
 CREATE TABLE IF NOT EXISTS TASK_REPORT
@@ -107,18 +144,3 @@ CREATE TABLE IF NOT EXISTS TASK_PLAN
     Task_ID                INTEGER NOT NULL REFERENCES TASK (Task_ID),
     PRIMARY KEY (Plan_ID, Plan_Task_Step)
 );
-
--- CREATE TABLE IF NOT EXISTS ASSIGNMENT (
---     Assignment_ID INT AUTOINCREMENT,
---     Assignment_Date_Assigned DATE NOT NULL,
---     Assignment_Date_Finished DATE NOT NULL,
---     Employee_ID INT NOT NULL,
---     Task_ID INT NOT NULL,
---     Activity_ID INT NOT NULL,
---     Project_ID INT NOT NULL,    
---     PRIMARY KEY (Assignment_ID),
---     FOREIGN KEY (Employee_ID) REFERENCES EMPLOYEE (Employee_ID),
---     FOREIGN KEY (Task_ID) REFERENCES TASK (Task_ID),
---     FOREIGN KEY (Activity_ID) REFERENCES ACTIVITY (Activity_ID),
---     FOREIGN KEY (Project_ID) REFERENCES PROJECT (Project_ID)
--- );

@@ -91,3 +91,7 @@ if __name__ == '__main__':
     print("End Scheduler")
     save_task_plan("project.db", nodes)
     
+    print("Run Assignment")
+    print("Read data from the database")
+    
+    
